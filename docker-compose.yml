@@ -4,19 +4,30 @@ services:
   vote:
     build: ./vote
     ports:
-      - "8080:80" # <-- Berubah menjadi 8080
+      - "8080:80"
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - redis
 
   result:
     build: ./result
     ports:
-      - "8081:80" # <-- Berubah menjadi 8081
+      - "8081:80"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
     depends_on:
       - db
 
   worker:
     build: ./worker
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_HOST=${DB_HOST}
     depends_on:
       - redis
       - db
@@ -27,8 +38,8 @@ services:
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db-init:/docker-entrypoint-initdb.d

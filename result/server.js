@@ -2,11 +2,11 @@ const express = require('express');
 const { Pool } = require('pg');
 const app = express();
 
-// Konfigurasi koneksi ke Database PostgreSQL
+// Mengambil kredensial dari Environment Variables
 const pool = new Pool({
-  user: 'postgres',
-  host: 'db',
-  password: 'password',
+  user: process.env.POSTGRES_USER,
+  host: process.env.DB_HOST,
+  password: process.env.POSTGRES_PASSWORD,
   database: 'postgres',
 });
 
