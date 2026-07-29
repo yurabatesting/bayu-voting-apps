@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  vote:
+    build: ./vote
+    ports:
+      - "8080:80" # <-- Berubah menjadi 8080
+    depends_on:
+      - redis
+
+  result:
+    build: ./result
+    ports:
+      - "8081:80" # <-- Berubah menjadi 8081
+    depends_on:
+      - db
+
+  worker:
+    build: ./worker
+    depends_on:
+      - redis
+      - db
+
+  redis:
+    image: redis:alpine
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+
+volumes:
+  db-data:
