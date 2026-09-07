@@ -1,8 +1,14 @@
 from flask import Flask, request
+import os
 import redis
 
 app = Flask(__name__)
-r = redis.Redis(host='redis', port=6379, db=0)
+
+# Mengambil konfigurasi Redis dari Environment Variables (dengan nilai default untuk lokal)
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
+
+r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 # Tampilan halaman utama
 HTML_VOTE = """
@@ -70,4 +76,5 @@ def index():
     return HTML_VOTE
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    port = int(os.environ.get('PORT', 80))
+    app.run(host="0.0.0.0", port=port)

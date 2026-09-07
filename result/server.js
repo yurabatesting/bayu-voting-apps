@@ -7,7 +7,7 @@ const pool = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.DB_HOST,
   password: process.env.POSTGRES_PASSWORD,
-  database: 'postgres',
+  database: process.env.POSTGRES_DB || 'postgres'
 });
 
 app.get('/', async (req, res) => {
