@@ -20,7 +20,8 @@ import (
 )
 
 func initTracer(ctx context.Context) (*sdktrace.TracerProvider, error) {
-	exporter, err := otlptracehttp.New(ctx, otlptracehttp.WithInsecure())
+	// Menghapus WithInsecure() agar menggunakan HTTPS (mencegah error 400 Bad Request ke New Relic)
+	exporter, err := otlptracehttp.New(ctx)
 	if err != nil {
 		return nil, err
 	}

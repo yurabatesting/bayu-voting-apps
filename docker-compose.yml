@@ -1,10 +1,10 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   vote:
     build: ./vote
     ports:
-      - "8080:80"
+      - "8082:80"
     environment:
       - REDIS_HOST=redis
       - OTEL_SERVICE_NAME=voting-vote
